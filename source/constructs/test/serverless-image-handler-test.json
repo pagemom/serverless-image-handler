@@ -71,7 +71,7 @@
   "Parameters": {
     "CorsEnabled": {
       "Type": "String",
-      "Default": "No",
+      "Default": "Yes",
       "AllowedValues": [
         "Yes",
         "No"
@@ -80,7 +80,7 @@
     },
     "CorsOrigin": {
       "Type": "String",
-      "Default": "*",
+      "Default": "https://www.lootgod.com",
       "Description": "If you selected 'Yes' above, please specify an origin value here. A wildcard (*) value will support any origin. We recommend specifying an origin (i.e. https://example.domain) to restrict cross-site access to your API."
     },
     "SourceBuckets": {
@@ -91,7 +91,7 @@
     },
     "DeployDemoUI": {
       "Type": "String",
-      "Default": "Yes",
+      "Default": "No",
       "AllowedValues": [
         "Yes",
         "No"
@@ -124,7 +124,7 @@
     },
     "AutoWebP": {
       "Type": "String",
-      "Default": "No",
+      "Default": "Yes",
       "AllowedValues": [
         "Yes",
         "No"
@@ -173,7 +173,7 @@
   "Mappings": {
     "Send": {
       "AnonymousUsage": {
-        "Data": "Yes"
+        "Data": "No"
       }
     }
   },
@@ -568,7 +568,7 @@
             "https"
           ],
           "paths": {
-            "/{proxy+}": {
+            "/{type}/{proxy+}": {
               "x-amazon-apigateway-any-method": {
                 "produces": [
                   "application/json"
@@ -1296,7 +1296,7 @@
                 "s3:putBucketAcl",
                 "s3:putEncryptionConfiguration",
                 "s3:putBucketPolicy",
-                "s3:CreateBucket",                
+                "s3:CreateBucket",
                 "s3:GetObject",
                 "s3:PutObject",
                 "s3:ListBucket"

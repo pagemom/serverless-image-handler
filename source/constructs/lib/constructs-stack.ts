@@ -18,13 +18,13 @@ export class ConstructsStack extends cdk.Stack {
     const corsEnabledParameter = new CfnParameter(this, 'CorsEnabled', {
       type: 'String',
       description: `Would you like to enable Cross-Origin Resource Sharing (CORS) for the image handler API? Select 'Yes' if so.`,
-      default: 'No',
+      default: 'Yes',
       allowedValues: [ 'Yes', 'No' ]
     });
     const corsOriginParameter = new CfnParameter(this, 'CorsOrigin', {
       type: 'String',
       description: `If you selected 'Yes' above, please specify an origin value here. A wildcard (*) value will support any origin. We recommend specifying an origin (i.e. https://example.domain) to restrict cross-site access to your API.`,
-      default: '*'
+      default: 'https://www.lootgod.com'
     });
     const sourceBucketsParameter = new CfnParameter(this, 'SourceBuckets', {
       type: 'String',
@@ -35,7 +35,7 @@ export class ConstructsStack extends cdk.Stack {
     const deployDemoUiParameter = new CfnParameter(this, 'DeployDemoUI', {
       type: 'String',
       description: 'Would you like to deploy a demo UI to explore the features and capabilities of this solution? This will create an additional Amazon S3 bucket and Amazon CloudFront distribution in your account.',
-      default: 'Yes',
+      default: 'No',
       allowedValues: [ 'Yes', 'No' ]
     });
     const logRetentionPeriodParameter = new CfnParameter(this, 'LogRetentionPeriod', {
@@ -47,7 +47,7 @@ export class ConstructsStack extends cdk.Stack {
     const autoWebPParameter = new CfnParameter(this, 'AutoWebP', {
       type: 'String',
       description: `Would you like to enable automatic WebP based on accept headers? Select 'Yes' if so.`,
-      default: 'No',
+      default: 'Yes',
       allowedValues: [ 'Yes', 'No' ]
     });
     const enableSignatureParameter = new CfnParameter(this, 'EnableSignature', {
@@ -129,7 +129,7 @@ export class ConstructsStack extends cdk.Stack {
     new cdk.CfnMapping(this, 'Send', {
       mapping: {
         AnonymousUsage: {
-          Data: 'Yes'
+          Data: 'No'
         }
       }
     });

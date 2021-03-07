@@ -17,7 +17,48 @@ exports.handler = async (event) => {
     event.requestContext && event.requestContext.hasOwnProperty('elb');
 
   try {
-    const request = await imageRequest.setup(event);
+    // Check for valid types
+    const modifiedEvent = (function makeModifiedEvent() {
+      // path is like /{type}/{image}
+      const { path } = event;
+      const trimmed = path.charAt(0) === '/' ? path.slice(1) : path;
+      const [type, image] = trimmed.split('/', 2);
+
+      // AWS-MAGICKS for unmodified pass through
+      if (type === 'AWS-MAGICKS') return { ...event, path: `/${image}` };
+
+      const widths = {
+        xs: 250,
+        sm: 500,
+        md: 750,
+        lg: 1440,
+      };
+      if (!widths[type]) {
+        throw {
+          status: 400,
+          message: 'Invalid image type requested.',
+          code: 'BadImageType',
+        };
+      }
+      const requestData = {
+        bucket: 'dev-keys-infra-s3-web3c8945db-x8iqi2hyb07u',
+        key: image,
+        edits: {
+          resize: {
+            width: widths[type],
+          },
+        },
+      };
+      const modifiedPath = `/${Buffer.from(
+        JSON.stringify(requestData)
+      ).toString('base64')}`;
+      return {
+        ...event,
+        path: modifiedPath,
+      };
+    })();
+
+    const request = await imageRequest.setup(modifiedEvent);
     console.log(request);
 
     const processedRequest = await imageHandler.process(request);

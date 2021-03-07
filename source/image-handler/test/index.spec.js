@@ -15,9 +15,12 @@ jest.mock('aws-sdk', () => {
 // Import index.js
 const index = require('../index.js');
 
+const getModifiedPath = (path) => `/AWS-MAGICKS${path}`;
+
 describe('index', function () {
   // Arrange
-  process.env.SOURCE_BUCKETS = 'source-bucket';
+  process.env.SOURCE_BUCKETS =
+    'source-bucket, dev-keys-infra-s3-web3c8945db-x8iqi2hyb07u';
   const mockImage = Buffer.from('SampleImageContent\n');
   const mockFallbackImage = Buffer.from('SampleFallbackImageContent\n');
 
@@ -39,7 +42,7 @@ describe('index', function () {
     it('001/should return the image when there is no error', async function () {
       // Arrange
       const event = {
-        path: '/test.jpg',
+        path: getModifiedPath('/test.jpg'),
       };
       // Act
       const result = await index.handler(event);
@@ -67,8 +70,9 @@ describe('index', function () {
     it('002/should return the image with custom headers when custom headers are provided', async function () {
       // Arrange
       const event = {
-        path:
-          '/eyJidWNrZXQiOiJzb3VyY2UtYnVja2V0Iiwia2V5IjoidGVzdC5qcGciLCJoZWFkZXJzIjp7IkN1c3RvbS1IZWFkZXIiOiJDdXN0b21WYWx1ZSJ9fQ==',
+        path: getModifiedPath(
+          '/eyJidWNrZXQiOiJzb3VyY2UtYnVja2V0Iiwia2V5IjoidGVzdC5qcGciLCJoZWFkZXJzIjp7IkN1c3RvbS1IZWFkZXIiOiJDdXN0b21WYWx1ZSJ9fQ=='
+        ),
       };
       // Act
       const result = await index.handler(event);
@@ -97,7 +101,7 @@ describe('index', function () {
     it('003/should return the image when the request is from ALB', async function () {
       // Arrange
       const event = {
-        path: '/test.jpg',
+        path: getModifiedPath('/test.jpg'),
         requestContext: {
           elb: {},
         },
@@ -130,7 +134,7 @@ describe('index', function () {
     it('001/should return an error JSON when an error occurs', async function () {
       // Arrange
       const event = {
-        path: '/test.jpg',
+        path: getModifiedPath('/test.jpg'),
       };
       // Mock
       mockS3.mockImplementationOnce(() => {
@@ -171,8 +175,9 @@ describe('index', function () {
     it('002/should return 500 error when there is no error status in the error', async function () {
       // Arrange
       const event = {
-        path:
-          'eyJidWNrZXQiOiJzb3VyY2UtYnVja2V0Iiwia2V5IjoidGVzdC5qcGciLCJlZGl0cyI6eyJ3cm9uZ0ZpbHRlciI6dHJ1ZX19',
+        path: getModifiedPath(
+          '/eyJidWNrZXQiOiJzb3VyY2UtYnVja2V0Iiwia2V5IjoidGVzdC5qcGciLCJlZGl0cyI6eyJ3cm9uZ0ZpbHRlciI6dHJ1ZX19'
+        ),
       };
       // Mock
       mockS3.mockImplementationOnce(() => {
@@ -217,7 +222,7 @@ describe('index', function () {
       process.env.CORS_ENABLED = 'Yes';
       process.env.CORS_ORIGIN = '*';
       const event = {
-        path: '/test.jpg',
+        path: getModifiedPath('/test.jpg'),
       };
       // Mock
       mockS3.mockReset();
@@ -269,7 +274,7 @@ describe('index', function () {
     it('004/should return an error JSON when getting the default fallback image fails if the default fallback image is enabled', async function () {
       // Arrange
       const event = {
-        path: '/test.jpg',
+        path: getModifiedPath('/test.jpg'),
       };
       // Mock
       mockS3.mockReset();
@@ -317,7 +322,7 @@ describe('index', function () {
       // Arrange
       process.env.DEFAULT_FALLBACK_IMAGE_KEY = '';
       const event = {
-        path: '/test.jpg',
+        path: getModifiedPath('/test.jpg'),
       };
       // Mock
       mockS3.mockImplementationOnce(() => {
@@ -360,7 +365,7 @@ describe('index', function () {
       // Arrange
       process.env.DEFAULT_FALLBACK_IMAGE_BUCKET = '';
       const event = {
-        path: '/test.jpg',
+        path: getModifiedPath('/test.jpg'),
       };
       // Mock
       mockS3.mockImplementationOnce(() => {
@@ -403,7 +408,7 @@ describe('index', function () {
   it('007/should return an error JSON when ALB request is failed', async function () {
     // Arrange
     const event = {
-      path: '/test.jpg',
+      path: getModifiedPath('/path.jpg'),
       requestContext: {
         elb: {},
       },

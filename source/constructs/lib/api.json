@@ -8,7 +8,7 @@
     "https"
   ],
   "paths": {
-    "/{proxy+}": {
+    "/{type}/{proxy+}": {
       "x-amazon-apigateway-any-method": {
         "produces": [
           "application/json"
