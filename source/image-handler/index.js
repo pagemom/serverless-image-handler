@@ -40,8 +40,10 @@ exports.handler = async (event) => {
           code: 'BadImageType',
         };
       }
+      // Use default source bucket env var
+      const sourceBuckets = imageRequest.getAllowedSourceBuckets();
       const requestData = {
-        bucket: 'dev-keys-infra-s3-web3c8945db-x8iqi2hyb07u',
+        bucket: sourceBuckets[0],
         key: image,
         edits: {
           resize: {
