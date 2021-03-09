@@ -22,7 +22,8 @@ exports.handler = async (event) => {
       // path is like /{type}/{image}
       const { path } = event;
       const trimmed = path.charAt(0) === '/' ? path.slice(1) : path;
-      const [type, image] = trimmed.split('/', 2);
+      const [type, ...imageParts] = trimmed.split('/');
+      const image = imageParts.join('/');
 
       // AWS-MAGICKS for unmodified pass through
       if (type === 'AWS-MAGICKS') return { ...event, path: `/${image}` };
@@ -32,6 +33,7 @@ exports.handler = async (event) => {
         sm: 500,
         md: 750,
         lg: 1440,
+        src: 9999, // don't actually use this
       };
       if (!widths[type]) {
         throw {
@@ -45,11 +47,14 @@ exports.handler = async (event) => {
       const requestData = {
         bucket: sourceBuckets[0],
         key: image,
-        edits: {
-          resize: {
-            width: widths[type],
-          },
-        },
+        edits:
+          type === 'src'
+            ? {}
+            : {
+                resize: {
+                  width: widths[type],
+                },
+              },
       };
       const modifiedPath = `/${Buffer.from(
         JSON.stringify(requestData)
