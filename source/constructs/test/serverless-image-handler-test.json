@@ -1722,6 +1722,18 @@
       "Description": "Link to API endpoint for sending image requests to.",
       "Value": {
         "Fn::Sub": "https://${ImageHandlerDistribution.DomainName}"
+      },
+      "Export": {
+        "Name": "ImagesApiEndpoint"
+      }
+    },
+    "CloudfrontId": {
+      "Description": "The Cloudfront Distribution ID of the Image handler.",
+      "Value": {
+        "Fn::Sub": "${ImageHandlerDistribution.DistributionId}"
+      },
+      "Export": {
+        "Name": "ImagesCloudfrontId"
       }
     },
     "DemoUrl": {

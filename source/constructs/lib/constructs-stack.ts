@@ -156,8 +156,14 @@ export class ConstructsStack extends cdk.Stack {
     // Outputs
     new cdk.CfnOutput(this, 'ApiEndpoint', {
       value: cdk.Fn.sub('https://${ImageHandlerDistribution.DomainName}'),
-      description: 'Link to API endpoint for sending image requests to.'
+      description: 'Link to API endpoint for sending image requests to.',
+      exportName: 'ImagesApiEndpoint'
     });
+    new cdk.CfnOutput(this, 'CloudfrontId', {
+      value: cdk.Fn.ref('ImageHandlerDistribution'),
+      description: 'The Cloudfront Distribution ID of the Image handler.',
+      exportName: 'ImagesCloudfrontId'
+    })
     new cdk.CfnOutput(this, 'DemoUrl', {
       value: cdk.Fn.sub('https://${DemoDistribution.DomainName}/index.html'),
       description: 'Link to the demo user interface for the solution.',
