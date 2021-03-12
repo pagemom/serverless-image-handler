@@ -15,7 +15,7 @@ jest.mock('aws-sdk', () => {
 // Import index.js
 const index = require('../index.js');
 
-const getModifiedPath = (path) => `/AWS-MAGICKS${path}`;
+const getModifiedPath = (path) => `${path}/AWS-MAGICKS`;
 
 describe('index', function () {
   // Arrange

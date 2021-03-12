@@ -19,11 +19,16 @@ exports.handler = async (event) => {
   try {
     // Check for valid types
     const modifiedEvent = (function makeModifiedEvent() {
-      // path is like /{type}/{image}
+      // path is like /{image}/{type}
       const { path } = event;
-      const trimmed = path.charAt(0) === '/' ? path.slice(1) : path;
-      const [type, ...imageParts] = trimmed.split('/');
-      const image = imageParts.join('/');
+      const trimmedPart = path.charAt(0) === '/' ? path.slice(1) : path;
+      const trimmed =
+        trimmedPart.charAt(trimmedPart.length - 1) === '/'
+          ? trimmedPart.slice(0, -1)
+          : trimmedPart;
+      const pathParts = trimmed.split('/');
+      const type = pathParts.pop();
+      const image = pathParts.join('/');
 
       // AWS-MAGICKS for unmodified pass through
       if (type === 'AWS-MAGICKS') return { ...event, path: `/${image}` };

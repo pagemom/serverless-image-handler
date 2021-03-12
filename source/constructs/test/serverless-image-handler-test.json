@@ -568,7 +568,7 @@
             "https"
           ],
           "paths": {
-            "/{type}/{proxy+}": {
+            "/{proxy+}": {
               "x-amazon-apigateway-any-method": {
                 "produces": [
                   "application/json"
@@ -1730,7 +1730,7 @@
     "CloudfrontId": {
       "Description": "The Cloudfront Distribution ID of the Image handler.",
       "Value": {
-        "Fn::Sub": "${ImageHandlerDistribution.DistributionId}"
+        "Ref": "ImageHandlerDistribution"
       },
       "Export": {
         "Name": "ImagesCloudfrontId"
